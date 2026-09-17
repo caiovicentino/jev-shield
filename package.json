@@ -1,0 +1,21 @@
+{
+  "name": "jev-shield",
+  "version": "0.1.0",
+  "description": "Semantic MCP firewall powered by Jev (System One verification). Screens tool calls, tool results, and tool descriptions with calibrated probabilities.",
+  "type": "module",
+  "bin": {
+    "jev-shield": "src/firewall.mjs"
+  },
+  "scripts": {
+    "demo": "node demo/attack.mjs",
+    "eval": "node eval/run.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "ai": "^7.0.105"
+  },
+  "license": "MIT"
+}

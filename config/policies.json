@@ -1,0 +1,17 @@
+{
+  "model": "typesafe-ai/jev",
+  "policy": { "review": 0.35, "action": 0.7, "severity_block": 2.0 },
+  "hazard_actions": {
+    "data_exfiltration": "block",
+    "destructive_action": "block",
+    "injection_in_args": "block",
+    "credential_exposure": "block"
+  },
+  "fail_mode": "open",
+  "scan_tool_poisoning": true,
+  "hide_poisoned_tools": false,
+  "tools": {
+    "send_email": { "recipient_allowlist": ["@empresa.com", "@clienteco.com"] }
+  },
+  "audit_log": "audit.jsonl"
+}

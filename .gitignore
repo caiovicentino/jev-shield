@@ -1,0 +1,8 @@
+node_modules/
+audit.jsonl
+eval/stderr.log
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
