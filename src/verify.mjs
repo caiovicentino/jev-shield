@@ -235,7 +235,7 @@ export async function scanToolsForPoisoning(tools, cfg) {
 
 function audit(cfg, entry) {
   const line = JSON.stringify({ ts: new Date().toISOString(), ...entry });
-  console.error(`[jev-shield:audit] ${line}`);
+  if (process.env.JEV_AUDIT_VERBOSE === '1') console.error(`[jev-shield:audit] ${line}`);
   try {
     const path = resolve(ROOT, '..', cfg.audit_log ?? 'audit.jsonl');
     appendFileSync(path, line + '\n');

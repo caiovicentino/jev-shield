@@ -14,6 +14,7 @@ function cli() {
   return null; // fall back to npx (network)
 }
 
+let warned = false;
 function verify(payload) {
   const c = cli();
   try {
@@ -22,7 +23,10 @@ function verify(payload) {
       : execFileSync('npx', ['-y', 'github:caiovicentino/jev-shield', 'verify'], { input: JSON.stringify(payload), encoding: 'utf8', timeout: 60000 });
     return JSON.parse(out);
   } catch (e) {
-    process.stderr.write(`[jev-shield] verification unavailable (${String(e?.message || e).split('\n')[0]})\n`);
+    if (!warned) {
+      warned = true;
+      process.stderr.write(`[jev-shield] verification unavailable (${String(e?.message || e).split('\n')[0]}) — failing open; set JEV_FAIL_MODE=closed to block instead\n`);
+    }
     return null;
   }
 }
@@ -56,7 +60,7 @@ function main() {
     const text = typeof res === 'string' ? res : JSON.stringify(res ?? '');
     if (!text || text.length < 24) process.exit(0);
     const v = verify(resultPayload(tool, text));
-    if (!v) process.exit(FAIL_MODE === 'closed' ? 2 : 0);
+    if (!v || v.error) process.exit(FAIL_MODE === 'closed' ? 2 : 0);
     const inj = v.hazards?.contains_injection ?? 0;
     const sec = v.hazards?.contains_secrets ?? 0;
     if (inj >= 0.7 || sec >= 0.7) {
@@ -77,7 +81,13 @@ function main() {
   if (!payload) process.exit(0);
 
   const v = verify(payload);
-  if (!v) process.exit(FAIL_MODE === 'closed' ? 2 : 0);
+  if (!v || v.error) {
+    if (process.env.JEV_FAIL_MODE === 'closed') process.exit(2);
+    process.stdout.write(JSON.stringify({
+      hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'ask', permissionDecisionReason: 'jev-shield: verification unavailable (auth/network) — confirm with the user before this action' },
+    }) + '\n');
+    process.exit(0);
+  }
   if (v.decision === 'block') {
     process.stdout.write(JSON.stringify({
       hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'deny', permissionDecisionReason: `jev-shield: ${summarize(v)}` },
