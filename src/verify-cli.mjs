@@ -6,7 +6,16 @@
 // Payload (result): { "kind":"result", "tool":"web_search", "text":"...tool output..." }
 // Output: { decision: "block"|"annotate"|"pass", hazards: {...}, severity, ms, usd }
 
+import { readFileSync } from 'node:fs';
 import { loadConfig, verifyCall, verifyResult } from './verify.mjs';
+
+// Load .env from the repo root (provider auth) if the ambient env lacks the keys.
+try {
+  for (const line of readFileSync(new URL('../.env', import.meta.url), 'utf8').split('\n')) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+  }
+} catch { /* no .env — rely on ambient env */ }
 
 const cfg = loadConfig(process.env.JEV_SHIELD_CONFIG);
 let input = '';
