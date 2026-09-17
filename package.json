@@ -14,13 +14,17 @@
     "demo/",
     "install.sh",
     "install-skill.mjs",
+    "install-hooks.mjs",
+    "hooks/",
+    "plugins/",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "demo": "node demo/attack.mjs",
     "eval": "node eval/run.mjs",
-    "install-skill": "node install-skill.mjs"
+    "install-skill": "node install-skill.mjs",
+    "install-hooks": "node install-hooks.mjs"
   },
   "engines": {
     "node": ">=20"

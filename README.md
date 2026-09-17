@@ -80,6 +80,23 @@ npx -y skills add caiovicentino/jev-shield -g          # multi-agent: Claude Cod
 
 In opencode, `/verify <command or text>` screens anything on demand. The skill requires `AI_GATEWAY_API_KEY` in the environment (see `.env.example`).
 
+## Enforcement (hooks & plugins)
+
+The skill is cooperative — the hook/plugin layer is enforced, tool-by-tool:
+
+| Agent | Mechanism | Covers |
+|---|---|---|
+| Claude Code | `PreToolUse` hook → `deny`/`ask` before Bash/Write/Edit/WebFetch/MCP tools; `PostToolUse` hook → flags poisoned tool results to the model | every tool call, incl. MCP |
+| opencode | plugin `tool.execute.before` (throws = block) and `tool.execute.after` (withholds injected results) | every tool call, incl. MCP |
+| Codex | no hook API — enforcement via the MCP firewall: `jev-shield wrap -- <upstream-cmd>` as the MCP server command | every MCP tool call |
+
+```bash
+npx -y github:caiovicentino/jev-shield install-hooks   # installs hook + plugin (merges, never clobbers)
+JEV_HOOK_OFF=1                                         # kill switch (env), JEV_FAIL_MODE=closed to fail closed
+```
+
+Every check costs ~$0.00003 and adds ~0.5–1.3s to a tool call. Local file reads (Read/Grep/Glob) are exempt by default.
+
 ## Policy is code, not a prompt
 
 `config/policies.json`:

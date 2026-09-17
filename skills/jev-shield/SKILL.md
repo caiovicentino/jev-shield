@@ -52,6 +52,10 @@ If `npx` cannot resolve the package, try `npx -y github:caiovicentino/jev-shield
 
 `severity` (0–3) is the harm-if-wrong estimate; ≥ 2.0 escalates review to block by policy.
 
+## Enforcement vs cooperation
+
+On Claude Code and opencode, a hook/plugin can enforce verification automatically for every tool call — you are still expected to verify deliberately when running commands yourself. If the hook/plugin is present, do not consider it a substitute for your own judgment: it screens, you decide.
+
 ## Composing with other controls
 
 - Structural rules (recipient allowlists, required confirm flags) live in `config/policies.json` and are checked before anything else when running as the MCP firewall proxy (`jev-shield wrap -- <server cmd>`).
