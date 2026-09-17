@@ -6,8 +6,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const SRC = join(HERE, '../skills/jev-shield/SKILL.md');
-const body = readFileSync(SRC, 'utf8').replaceAll('{{JEV_SHIELD_PATH}}', join(HERE, '../src'));
+const SRC = join(HERE, 'skills/jev-shield/SKILL.md');
+const body = readFileSync(SRC, 'utf8').replaceAll('{{JEV_SHIELD_PATH}}', join(HERE, 'src'));
 
 for (const dir of [join(process.env.HOME ?? '~', '.claude/skills'), join(process.env.HOME ?? '~', '.config/opencode/skills')]) {
   try {
@@ -17,6 +17,16 @@ for (const dir of [join(process.env.HOME ?? '~', '.claude/skills'), join(process
   } catch (e) {
     console.error(`skip ${dir}: ${e?.message ?? e}`);
   }
+}
+
+// opencode command: /verify
+try {
+  const cmdDir = join(process.env.HOME ?? '~', '.config/opencode/command');
+  mkdirSync(cmdDir, { recursive: true });
+  copyFileSync(join(HERE, 'skills/jev-shield/commands/verify.md'), join(cmdDir, 'verify.md'));
+  console.log(`installed: ${join(cmdDir, 'verify.md')} (command: /verify)`);
+} catch (e) {
+  console.error(`skip command: ${e?.message ?? e}`);
 }
 console.log('\nDone. The skill will be picked up the next time your agent starts.');
 console.log('Requires AI_GATEWAY_API_KEY in the environment (see .env.example).');

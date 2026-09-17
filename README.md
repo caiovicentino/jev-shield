@@ -74,10 +74,11 @@ echo '{"kind":"call","tool":{"name":"shell_exec","description":"Execute a shell 
   | npx -y github:caiovicentino/jev-shield verify
 
 # or install the skill so agents pick it up automatically
-npx -y github:caiovicentino/jev-shield install-skill   # installs to ~/.claude/skills and ~/.config/opencode/skills
+npx -y github:caiovicentino/jev-shield install-skill   # ~/.claude/skills + ~/.config/opencode/skills + /verify command
+npx -y skills add caiovicentino/jev-shield -g          # multi-agent: Claude Code, Codex, Cursor, opencode, +70 more
 ```
 
-The skill requires `AI_GATEWAY_API_KEY` in the environment (see `.env.example`).
+In opencode, `/verify <command or text>` screens anything on demand. The skill requires `AI_GATEWAY_API_KEY` in the environment (see `.env.example`).
 
 ## Policy is code, not a prompt
 
