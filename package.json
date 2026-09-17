@@ -4,11 +4,23 @@
   "description": "Semantic MCP firewall powered by Jev (System One verification). Screens tool calls, tool results, and tool descriptions with calibrated probabilities.",
   "type": "module",
   "bin": {
-    "jev-shield": "src/firewall.mjs"
+    "jev-shield": "bin/jev-shield.mjs"
   },
+  "files": [
+    "bin/",
+    "src/",
+    "skills/",
+    "config/",
+    "demo/",
+    "install.sh",
+    "install-skill.mjs",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "demo": "node demo/attack.mjs",
-    "eval": "node eval/run.mjs"
+    "eval": "node eval/run.mjs",
+    "install-skill": "node install-skill.mjs"
   },
   "engines": {
     "node": ">=20"
