@@ -15,6 +15,7 @@
     "install.sh",
     "install-skill.mjs",
     "install-hooks.mjs",
+    "uninstall-hooks.mjs",
     "hooks/",
     "plugins/",
     "README.md",
@@ -24,7 +25,8 @@
     "demo": "node demo/attack.mjs",
     "eval": "node eval/run.mjs",
     "install-skill": "node install-skill.mjs",
-    "install-hooks": "node install-hooks.mjs"
+    "install-hooks": "node install-hooks.mjs",
+    "uninstall-hooks": "node uninstall-hooks.mjs"
   },
   "engines": {
     "node": ">=20"
