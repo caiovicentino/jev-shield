@@ -66,10 +66,15 @@ Point your MCP client's command at `jev-shield` instead of the server. Everythin
 
 ## Agent skill (Claude Code / opencode / compatible agents)
 
-Installs the skill so agents verify their own risky actions before acting (destructive commands, external sends, secrets/PII, untrusted content):
+Give any agent semantic verification of its own risky actions — destructive commands, external sends, secrets/PII, untrusted content:
 
 ```bash
-./install.sh
+# zero-install: agents call it directly
+echo '{"kind":"call","tool":{"name":"shell_exec","description":"Execute a shell command"},"args":{"command":"rm -rf /var/data"}}' \
+  | npx -y github:caiovicentino/jev-shield verify
+
+# or install the skill so agents pick it up automatically
+npx -y github:caiovicentino/jev-shield install-skill   # installs to ~/.claude/skills and ~/.config/opencode/skills
 ```
 
 The skill requires `AI_GATEWAY_API_KEY` in the environment (see `.env.example`).
